@@ -1,70 +1,69 @@
-var express = require('express');
-var app = express();
-var bodyParser = require('body-parser');
-var path = require('path');
-var server = http.createServer(app);
-var io = require('socket.io').listen(server);
-
-var users = {};
-
+var path = require('path'),
+	http = require('http'),
+	express = require('express'),
+	bodyParser = require('body-parser'),
+	cookieParser = require('cookie-parser'),
+	app = express(),
+	server = app.listen(3000, function(){ console.log('listen on *:3000'); });
+	io = require('socket.io')(server);
+	
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
+app.set('view engine' ,'ejs');
 
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
-
+app.use(cookieParser());
 app.use('/public', express.static(__dirname + '/public'));
 
-app.get('/login', function(req, res){
-	res.sendfile('login.html');
-});
+var users = {};
 
-//ç™»å…¥è¡¨å–®è³‡è¨Š
-app.post('/formLogin', function(req, res){
-    console.log(req.body);
-	if (users[req.body.name]) {
-	//å­˜åœ¨ï¼Œä¸å…è¨±ç™»å…¥
-	res.redirect('/signin');
+app.get('/', function(req, res){
+	if(req.cookies.user == null){
+		res.redirect('/signin');
 	} else {
-	//ä¸å­˜åœ¨ï¼Œå„²å­˜ç”¨æˆ¶ cookie ä¸¦è·³è½‰ä¸»é 
-	res.cookie("user", req.body.name, {maxAge: 1000*60*60*24*30});
-	res.redirect('/');
+		res.render('chat.ejs');
 	}
 });
 
-//ç”¨æˆ¶ç™»å…¥
-io.sockets.on('connection', function(socket){
-	
-	//ç”¨æˆ¶ä¸Šç·šï¼Œç¢ºèªåç¨±æ˜¯å¦é‡è¤‡ï¼Œæ²’æœ‰å‰‡å»£æ’­
-	sockets.on('online', function(data){
-		
-		//æ–¹ä¾¿åˆªé™¤ä½¿ç”¨
-		socket.name = data.name;
-		
-		//æ¯”å°æ˜¯å¦æœ‰é‡è¤‡åç¨±ï¼Œæ²’æœ‰å‰‡è¨»å†Šç‚ºæ–°ç”¨æˆ¶
-		if(!users[data.name])
-		{
-			user[name] = {
-				name: data.name,
-				password: data.password,
-				pos: data.pos,
-				pro: data.pro
-			};
+app.get('/signin', function(req, res){
+	res.render('login.ejs');
+});
+
+app.post('/formLogin', function(req, res){
+	if (users[req.body.name]) {
+		//´æÔÚ£¬²»ÔÊÔSµÇÈë
+		res.redirect('/signin');
+	} else {
+		//²»´æÔÚ£¬ƒ¦´æÓÃ‘ô cookie KÌøŞDÖ÷í“
+		res.cookie("user", req.body.name, {maxAge: 1000*60});
+		res.redirect('/');
+	}
+});
+
+app.post('/formLogout' , function(req, res){
+	res.render('login.ejs');
+});
+
+
+io.sockets.on('connection', function (socket) {
+	// server notice that somebody does login with all
+	socket.on('online', function (data) {
+		socket.name = data.user;
+		if(!users[data.user]){
+			users[data.user] = data.user;
 		}
-		//å‘å…¨å“¡å»£æ’­
-		io.sockets.emit('online', {users: users, user: data.name});
-	});
-	
-	socket.on('disconnect', function() {
-		//è‹¥ users å¯¹è±¡ä¸­ä¿å­˜äº†è¯¥ç”¨æˆ·å
-		if (users[socket.name]) {
-		//ä» users å¯¹è±¡ä¸­åˆ é™¤è¯¥ç”¨æˆ·å
-		delete users[socket.name];
-		//å‘å…¶ä»–æ‰€æœ‰ç”¨æˆ·å¹¿æ’­è¯¥ç”¨æˆ·ä¸‹çº¿ä¿¡æ¯
-		socket.broadcast.emit('offline', {users: users, user: socket.name});
-		}
+  		io.sockets.emit('online', {users: users, user: data.user});
+  	});
+
+  	// server notice that somebody does loginout with all
+  	socket.on('disconnect', function() {
+  		//Èô users ¶ÔÏóÖĞ±£´æÁË¸ÃÓÃ»§Ãû
+  		if (users[socket.name]) {
+    		//´Ó users ¶ÔÏóÖĞÉ¾³ı¸ÃÓÃ»§Ãû
+   			delete users[socket.name];
+    		//ÏòÆäËûËùÓĞÓÃ»§¹ã²¥¸ÃÓÃ»§ÏÂÏßĞÅÏ¢
+    		socket.broadcast.emit('offline', {users: users, user: socket.name});
+  		}
 	});
 	
 });
-
-app.listen(3000); // Port

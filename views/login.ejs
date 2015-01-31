@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <title>login</title>
+  <script src="/public/js/jquery-2.1.3.min.js"></script>
+  <link rel="stylesheet" href="/public/css/bootstrap.min.css">
+  <script>
+	  $(function(){
+	  	$("#submitBtn").click(function(){
+	  		var namex = $("#namex").val();
+	  		var passwordx = $("#passwordx").val();
+	  		if(namex == ""|| passwordx ==""){
+		  		alert("請輸入您的大名及密碼");
+		  	}else{
+		  		$("#postForm").submit();
+		  	}
+		});
+	  });
+  </script>
+</head>
+<body>
+	<h1>請輸入您的登入資訊</h1>
+	<form action="/formLogin" method="post" class="form-inline" id="postForm">
+		<div class="form-group">
+			<input type="text" name="name" id="namex" placeholder="請輸入您的大名" class="form-control" />
+			<input type="text" name="password" id="passwordx" placeholder="請輸入您的密碼"  class="form-control" />
+			<input type="button" value="進入聊天室" id="submitBtn" class="btn btn-success"/>
+		</div>
+		<div>
+			<div class="form-group">
+				<select name="pos" id="" class="form-control">
+					<option value="fullstack">全端神</option>
+					<option value="design">設計師</option>
+					<option value="soft">軟體工程師</option>
+					<option value="hard">硬體工程師</option>
+					<option value="student">學生</option>
+				</select>
+			</div>
+			<div class="form-group">
+				<div>
+					<ul class="list-unstyled">
+						<li><input type="checkbox" name="pro" id="Arduino">Arduino</li>
+						<li><input type="checkbox" name="pro" id="CSS">CSS</li>
+						<li><input type="checkbox" name="pro" id="HTML">HTML</li>
+						<li><input type="checkbox" name="pro" id="illustrator">illustrator</li>
+						<li><input type="checkbox" name="pro" id="jquery">jquery</li>
+						<li><input type="checkbox" name="pro" id="node.js">node.js</li>
+						<li><input type="checkbox" name="pro" id="php">php</li>
+						<li><input type="checkbox" name="pro" id="photoshop">php</li>
+						<li><input type="checkbox" name="pro" id="QML">QML</li>
+						<li><input type="checkbox" name="pro" id="UI/UX">UI/UX</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</form>
+</body>
+</html>

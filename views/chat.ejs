@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="https://cdn.socket.io/socket.io-1.3.2.js"></script>
+	<script src="/public/js/jquery-2.1.3.min.js"></script>
+	<script src="/public/js/jquery.cookie.js"></script>
+	<script>
+			var socket = io();
+			var user = $.cookie('user');
+			var to = 'all';
+			var sys;
+			// 成功進入這個頁面立即送出req通知server
+			socket.emit('online', {user: user});
+	  		socket.on('online', function (data) {
+	  			if(data.user!=user){
+	  				sys = '<div>' + new Date() + data.user + '登入</div>';
+	  			}else{
+	  				sys = '<div>' + new Date() + '您已進入聊天室';
+	  			}
+	  			
+	    		$('#loginTips').append(sys);
+	  		});	
+	  		socket.on('offline', function (data){
+				$('#loginTips').append('<li>' + new Date() + data.user + '離線了。</li>');
+	  		});
+	  		//服务器关闭
+			socket.on('disconnect', function() {
+				var sys = '<div style="color:#f00">系统:连接服务器失败！</div>';
+				$("#loginTips").append(sys + "<br/>");
+				$("#list").empty();
+			});
+
+			//重新启动服务器
+			socket.on('reconnect', function() {
+		  		var sys = '<div style="color:#f00">系统:重新连接服务器！</div>';
+		  		$("#loginTips").append(sys + "<br/>");
+		  		socket.emit('live', {user: from});
+			});
+
+	</script>
+	<link rel="stylesheet" href="/public/css/bootstrap.min.css">
+</head>
+<body>
+	<div id="loginTips">
+		
+	</div>
+	<form action="/formLogout" method="post">
+		<input type="submit" value="登出">
+	</form>
+</body>
+</html>
