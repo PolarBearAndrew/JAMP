@@ -6,22 +6,19 @@
 	<title>chat room</title>
 
 	<style>
-		* {
-			overflow: hidden;
-		}
-		
 		body {
 			margin: 0px;
+			overflow: hidden;
 		}
 		
 		#main {
 			width: calc(100% - 300px);
 			height: 600px;
-			/*			background-color: #a32b2b;*/
+			/*						background-color: #a32b2b;*/
 		}
 		
 		div#say {
-			position: fixed;
+			position: absolute;
 			top: calc(100% - 100px);
 			width: calc(100% - 300px);
 			height: 100px;
@@ -93,7 +90,8 @@
 		#listMember {
 			width: 300px;
 			height: 100%;
-			top: 0px;
+			margin-top: -60px;
+			top: 60px;
 			position: absolute;
 			left: calc(100% - 300px);
 			background-color: #24ada8;
@@ -229,7 +227,7 @@
 <body>
 	<div id="main">
 		<button class="newRoom">multi-room</button>
-		<button style="border-radius:15px; background-color:#599bb3; color:white;" id="reset">Reset</button>
+		<button id="reset">Reset</button>
 		<div class="tab" data-roomid="all">ALL</div>
 		<div class="room" data-roomid="all">聊天室：大廳
 			<br>
