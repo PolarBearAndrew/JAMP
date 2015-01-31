@@ -50,46 +50,117 @@
 			border-radius: 8px;
 			cursor: pointer;
 		}
+		
+		div.room {
+			position: absolute;
+			top: 60px;
+			left: 0px;
+			opacity: 1px;
+			width: 100%;
+			height: 100%;
+		}
+		
+		div.tab {
+			margin-top: 30px;
+			float: left;
+			width: 100px;
+			height: 22px;
+			margin-right: 2px;
+			background-color: #333;
+			cursor: pointer;
+			color: white;
+			font-size: 18px;
+			text-align: center;
+			font-weight: bolder;
+			padding-top: 8px;
+		}
+		
+		div.tab:hover {
+			opacity: 0.8;
+		}
 	</style>
 
 	<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
-	<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+	<!--	<script src="http://code.jquery.com/jquery-1.11.1.js"></script>-->
+	<script src="jquery-2.1.3.min.js"></script>
 
 	<script>
-		var myId = "andrew";
-		var myTeam = "JAMP";
-		var to = "doro";
-
-		var socket = io();
+		
+//		var myId = "andrew";
+//		var myTeam = "JAMP";
+//		var to = "doro";
+//
+//		var socket = io();
 
 		$(document).ready(function () {
-			$('div#send').click(function () { //click 傳送
-
-				var data = new Object(); ///建立物件
-				data.from = myId;
-				data.to = to; //傳送目標
-				data.say = $('input.say').val(); //input的訊息
-				data.roomId = "";
-
-				socket.emit('msg', data); //傳送給server
-				return false;
-			});
+//			$('div#send').click(function () { //click 傳送
+//
+//				var data = new Object(); ///建立物件
+//				data.from = myId;
+//				data.to = to; //傳送目標
+//				data.say = $('input.say').val(); //input的訊息
+//				data.roomId = "";
+//
+//				socket.emit('msg', data); //傳送給server
+//				return false;
+//			});
+			
+			
+			showRoom(1);
 		});
 
-		socket.on('say', function (data) {
-			alert(data.to.indexOf(myId));
-			if ((data.to.indexOf(myId) != -1) || (data.to == 'all')) {
-				$('#main').append(data.from + "&nbsp;[JAMP]" + "&nbsp;:&nbsp;" + data.say + "<br/>");
-			}
+//		socket.on('say', function (data) {
+//			alert(data.to.indexOf(myId));
+//			if ((data.to.indexOf(myId) != -1) || (data.to == 'all')) {
+//				$('#main').append(data.from + "&nbsp;[JAMP]" + "&nbsp;:&nbsp;" + data.say + "<br/>");
+//			}
+//
+//		});
 
+
+		$('html, body').on('click', 'div.tab', function () {
+			showRoom($(this).attr("data-roomId"));
+			//			alert('div.room[data-roomId="' + $(this).attr("data-roomId") + '"]');
+			return false;
 		});
+
+
+		function showRoom(id) {
+			$('div.room').fadeOut(0);
+			$('div.room[data-roomId="' + id.toString() + '"]').fadeIn(200);
+		}
+		
+		
+		var room = '<div class="tab" data-roomId="@id">@tab</div><div class="room" data-roomId="@id"></div>';
+		function addRoom(id, tabName){
+			var tmp = room.replace('@id', id);
+			tmp = tmp.replace('@tab', tabName);
+			$('div#main').append(tmp);
+		}
+		
+		function removeRoom(id){
+			$('div.room[data-roomId="' + id.toString() + '"]').remove();
+		}
+		
+		function sayRoom(id, say){
+			$('div.room[data-roomId="' + id.toString() + '"]').append(say;
+		}
 	</script>
 
 </head>
 
 <body>
 	<div id="main">
-
+		<div class="tab" data-roomId="1">1</div>
+		<div class="tab" data-roomId="2">2</div>
+		<div class="tab" data-roomId="3">3</div>
+		<div class="tab" data-roomId="4">4</div>
+		<div class="tab" data-roomId="5">5</div>
+		<div class="room" data-roomId="1">111</div>
+		<div class="room" data-roomId="2">222</div>
+		<div class="room" data-roomId="3">333</div>
+		<div class="room" data-roomId="4">444</div>
+		<div class="room" data-roomId="5">555s</div>
 	</div>
 	<div id="say">
 		<input type="text" class="say">
