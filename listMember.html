@@ -1,30 +1,41 @@
 <!doctype html>
 <html>
-  <head>
-    <meta charset="utf-8">
-      <title>listMember</title>
-      <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-        <script>
-        $(document).ready(function()
-        {
-          var array = [{name:"Mark",job:"teacher",skill:"PHP,Java"},{name:"Jack",job:"firefighter",skill:"Embeded system"},{name:"Peter",job:"farmer",skill:"Ruby"}];
-          $("#reset").click(function(){                      //jQuery onClick
-            $("#listMember").empty();                       //清空原來的div內容
-            //$.getJSON(array,function(data){
-              $.each(array,function(key, value){
-                $("#listMember").append("<ul>姓名: <a id = '"+array[key].name+"' href='http://google.com.tw' onclick=''style = 'font-size:30px; text-decoration:none;'>"+array[key].name+"</a><li>職業: "+array[key].job+"</li><li>專長: "+array[key].skill+"</li></ul>");
-              });  //將抓取的資料塞入div 中
-            //});
-          });
-        });
-        </script>
-  </head>
-  <body>
-    <div id="listMember" style = "height:100%; width:300px; float:right; background-color: gray;">
-      <ul>
-        <li></li><li></li><li></li>
-      </ul>
-    </div>
-    <button style = "border-radius:15px; background-color:#599bb3; color:white;" id="reset">Reset</button>
-  </body>
+
+<head>
+	<meta charset="utf-8">
+	<title>listMember</title>
+	<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+	<script>
+		$(document).ready(function () {
+			var array = [{
+				name: "Mark",
+				job: "teacher",
+				skill: "PHP,Java"
+			}, {
+				name: "Jack",
+				job: "firefighter",
+				skill: "Embeded system"
+			}, {
+				name: "Peter",
+				job: "farmer",
+				skill: "Ruby"
+			}];
+			$("#reset").click(function () { //jQuery onClick
+				$("#listMember").empty(); //清空原來的div內容
+				//$.getJSON(array,function(data){
+				$.each(array, function (key, value) {
+					$("#listMember").append("<ul>姓名: <a id = '" + array[key].name + "' href='http://google.com.tw' onclick=''style = 'font-size:30px; text-decoration:none;'>" + array[key].name + "</a><li>職業: " + array[key].job + "</li><li>專長: " + array[key].skill + "</li></ul>");
+				}); //將抓取的資料塞入div 中
+				//});
+			});
+		});
+	</script>
+</head>
+
+<body>
+	<div id="listMember" style="height:100%; width:300px; float:right; background-color: gray;">
+	</div>
+	<button style="border-radius:15px; background-color:#599bb3; color:white;" id="reset">Reset</button>
+</body>
+
 </html>
