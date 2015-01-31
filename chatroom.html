@@ -13,7 +13,7 @@
 		#main {
 			width: calc(100% - 300px);
 			height: 600px;
-			background-color: #a32b2b;
+/*			background-color: #a32b2b;*/
 		}
 		
 		div#say {
@@ -53,11 +53,12 @@
 		
 		div.room {
 			position: absolute;
+			padding: 20px;
 			top: 60px;
 			left: 0px;
 			opacity: 1px;
-			width: 100%;
-			height: 100%;
+			width: calc(100% - 40px);
+			height: calc(100% - 40px);
 		}
 		
 		div.tab {
@@ -78,89 +79,105 @@
 		div.tab:hover {
 			opacity: 0.8;
 		}
+		
+		.newRoom {
+			position: absolute;
+			top: 0px;
+			left: 0px;
+		}
 	</style>
 
 	<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
-	<!--	<script src="http://code.jquery.com/jquery-1.11.1.js"></script>-->
-	<script src="jquery-2.1.3.min.js"></script>
+	<script src="http://code.jquery.com/jquery-2.1.3.js"></script>
 
 	<script>
-		
-//		var myId = "andrew";
-//		var myTeam = "JAMP";
-//		var to = "doro";
-//
-//		var socket = io();
+		var roomIdNow = "";
+
+		var myId = "andrew";
+		var myTeam = "JAMP";
+		var to = "andrew";
+
+		var socket = io();
 
 		$(document).ready(function () {
-//			$('div#send').click(function () { //click 傳送
-//
-//				var data = new Object(); ///建立物件
-//				data.from = myId;
-//				data.to = to; //傳送目標
-//				data.say = $('input.say').val(); //input的訊息
-//				data.roomId = "";
-//
-//				socket.emit('msg', data); //傳送給server
-//				return false;
-//			});
-			
-			
-			showRoom(1);
+			showRoom("all");
 		});
 
-//		socket.on('say', function (data) {
-//			alert(data.to.indexOf(myId));
-//			if ((data.to.indexOf(myId) != -1) || (data.to == 'all')) {
-//				$('#main').append(data.from + "&nbsp;[JAMP]" + "&nbsp;:&nbsp;" + data.say + "<br/>");
-//			}
-//
-//		});
+		socket.on('say', function (data) { //收到訊息
+			//alert(data.to.indexOf(myId));
+			if (data.to == 'all') {
+				$('div.room[data-roomid="all"]').append(data.from + "&nbsp;[JAMP]" + "&nbsp;:&nbsp;" + data.say + "<br/>");
+			} else if (data.to.indexOf(myId) != -1) {
+				var getTabTmp = $('div.room[data-roomid="' + data.roomid + '"]').text();
+				if (getTabTmp == "") {
+					addRoom(data.roomid, data.roomid);
+				}
+				sayRoom(data.roomid, data.from + "&nbsp;[JAMP]" + "&nbsp;:&nbsp;" + data.say + "<br/>");
 
+			}
+		});
 
-		$('html, body').on('click', 'div.tab', function () {
-			showRoom($(this).attr("data-roomId"));
-			//			alert('div.room[data-roomId="' + $(this).attr("data-roomId") + '"]');
+		$('html, body').on('click', 'div#send', function () {
+			var data = new Object(); ///建立物件
+			data.from = myId;
+			data.to = to; //傳送目標
+			data.say = $('input.say').val(); //input的訊息
+			data.roomid = roomIdNow;
+
+			socket.emit('msg', data); //傳送給server
 			return false;
 		});
 
+		$('html, body').on('click', 'div.tab', function () {
+			showRoom($(this).attr("data-roomid"));
+			return false;
+		});
+
+		//control romm
+
+		var room = '<div class="tab" data-roomid="@id">@tab</div><div class="room" data-roomid="@id">聊天室：＠tab<br></div>';
+
+		function addRoom(id, tabName) {
+			var tmp = room.replace('@id', id);
+			tmp = tmp.replace('@id', id);
+			tmp = tmp.replace('@tab', tabName);
+			tmp = tmp.replace('@tab', tabName);
+			$('div#main').append(tmp);
+			$('div.room[data-roomid="' + id.toString() + '"]').fadeOut(0);
+		}
 
 		function showRoom(id) {
 			$('div.room').fadeOut(0);
-			$('div.room[data-roomId="' + id.toString() + '"]').fadeIn(200);
+			$('div.room[data-roomid="' + id.toString() + '"]').fadeIn(200);
+			roomIdNow = id;
 		}
-		
-		
-		var room = '<div class="tab" data-roomId="@id">@tab</div><div class="room" data-roomId="@id"></div>';
-		function addRoom(id, tabName){
-			var tmp = room.replace('@id', id);
-			tmp = tmp.replace('@tab', tabName);
-			$('div#main').append(tmp);
+
+		function removeRoom(id) {
+			$('div.room[data-roomid="' + id.toString() + '"]').remove();
+			$('div.tab[data-roomid="' + id.toString() + '"]').remove();
 		}
-		
-		function removeRoom(id){
-			$('div.room[data-roomId="' + id.toString() + '"]').remove();
+
+		function sayRoom(id, say) {
+			$('div.room[data-roomid="' + id.toString() + '"]').append(say);
 		}
-		
-		function sayRoom(id, say){
-			$('div.room[data-roomId="' + id.toString() + '"]').append(say;
-		}
+
+		$('html, body').on('click', 'button.newRoom', function () {
+			var name = 'JAMP';
+			addRoom(name, name);
+			roomIdNow = name;
+			return false;
+		});
 	</script>
 
 </head>
 
 <body>
 	<div id="main">
-		<div class="tab" data-roomId="1">1</div>
-		<div class="tab" data-roomId="2">2</div>
-		<div class="tab" data-roomId="3">3</div>
-		<div class="tab" data-roomId="4">4</div>
-		<div class="tab" data-roomId="5">5</div>
-		<div class="room" data-roomId="1">111</div>
-		<div class="room" data-roomId="2">222</div>
-		<div class="room" data-roomId="3">333</div>
-		<div class="room" data-roomId="4">444</div>
-		<div class="room" data-roomId="5">555s</div>
+		<button class="newRoom">multi-room</button>
+		<div class="tab" data-roomid="all">ALL</div>
+		<div class="room" data-roomid="all">聊天室：大廳
+			<br>
+		</div>
 	</div>
 	<div id="say">
 		<input type="text" class="say">
