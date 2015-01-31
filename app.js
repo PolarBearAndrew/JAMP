@@ -1,12 +1,3 @@
-<<<<<<< HEAD
-var app = require('express')();
-var http = require('http').Server(app);
-var io = require('socket.io')(http);
-
-http.listen(3000, function () {
-	console.log('listening on *:3000');
-});
-=======
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
@@ -77,4 +68,3 @@ io.sockets.on('connection', function(socket){
 });
 
 app.listen(3000); // Port
->>>>>>> 30de924aea8986b19173468ecfb1ba825425472f
