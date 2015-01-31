@@ -54,21 +54,34 @@
 
 	<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
 	<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+
 	<script>
+		var myId = "andrew";
+		var myTeam = "JAMP";
+		var to = "doro";
+
 		var socket = io();
 
 		$(document).ready(function () {
-			$('div#send').click(function () {
-				//alert('send');
+			$('div#send').click(function () { //click 傳送
 
-				var data = new Object();
-				data.to = "all";
-				data.say = "hi, every one"; //$('input.say').val()
+				var data = new Object(); ///建立物件
+				data.from = myId;
+				data.to = to; //傳送目標
+				data.say = $('input.say').val(); //input的訊息
+				data.roomId = "";
 
-				socket.emit('msg', data);
-				//alert($('input.say').val());
+				socket.emit('msg', data); //傳送給server
 				return false;
 			});
+		});
+
+		socket.on('say', function (data) {
+			alert(data.to.indexOf(myId));
+			if ((data.to.indexOf(myId) != -1) || (data.to == 'all')) {
+				$('#main').append(data.from + "&nbsp;[JAMP]" + "&nbsp;:&nbsp;" + data.say + "<br/>");
+			}
+
 		});
 	</script>
 
