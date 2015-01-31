@@ -113,7 +113,8 @@
 					addRoom(data.roomid, data.roomid);
 				}
 				sayRoom(data.roomid, data.from + "&nbsp;[JAMP]" + "&nbsp;:&nbsp;" + data.say + "<br/>");
-
+			} else{
+				sayRoom(data.roomid, data.from + "&nbsp;[JAMP]" + "&nbsp;:&nbsp;" + data.say + "<br/>"); //沒名單的事群組
 			}
 		});
 
@@ -135,7 +136,7 @@
 
 		//control romm
 
-		var room = '<div class="tab" data-roomid="@id">@tab</div><div class="room" data-roomid="@id">聊天室：＠tab<br></div>';
+		var room = '<div class="tab" data-roomid="@id">@tab</div><div class="room" data-roomid="@id">聊天室： @tab <br></div>';
 
 		function addRoom(id, tabName) {
 			var tmp = room.replace('@id', id);
@@ -167,6 +168,17 @@
 			roomIdNow = name;
 			return false;
 		});
+		
+		$('html, body').on('click', 'button.newMember', function () {
+			var newM = 'doro';
+			var data = new Object(); ///建立物件
+			data.from = myId;
+			data.to = newM; //傳送目標
+			data.say = newM+"加入了聊天室"; //input的訊息
+			data.roomid = roomIdNow;
+			socket.emit('msg', data); //傳送給server
+			return false;
+		});
 	</script>
 
 </head>
@@ -174,6 +186,7 @@
 <body>
 	<div id="main">
 		<button class="newRoom">multi-room</button>
+		<button class="newMember" data-member="doro">new member</button>
 		<div class="tab" data-roomid="all">ALL</div>
 		<div class="room" data-roomid="all">聊天室：大廳
 			<br>
