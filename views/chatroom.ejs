@@ -8,6 +8,7 @@
 	<style>
 		body {
 			margin: 0px;
+			background-color: #b2e4ed;
 			overflow: hidden;
 		}
 		
@@ -22,7 +23,9 @@
 			top: calc(100% - 100px);
 			width: calc(100% - 300px);
 			height: 100px;
-			background-color: #206d29;
+/*			background-color: #206d29;*/
+			background-color: #69d8eb;
+			border-top: 6px dashed white;
 		}
 		
 		div#say>* {
@@ -30,6 +33,7 @@
 		}
 		
 		input.say {
+			border-radius:8px;
 			margin-top: 20px;
 			margin-left: 5%;
 			width: 80%;
@@ -42,7 +46,6 @@
 			height: 44px;
 			width: 10%;
 			margin-left: 1%;
-			background-color: #0039f8;
 			font-size: 34px;
 			text-align: center;
 			font-weight: bolder;
@@ -50,23 +53,31 @@
 			padding-top: 16px;
 			border-radius: 8px;
 			cursor: pointer;
+			background-color: #4aaf69;
 		}
+			
 		
 		#logout {
-			margin-top: 24px;
+			position : fixed;
+			top : clac(100% - 44px);
+			right : 0px;
+			margin-right: 6px;
+			margin-top: 44px;
 			height: 44px;
-			width: 10%;
-			margin-left: 1%;
-			background-color: #0039f8;
-			font-size: 34px;
+			width: 120;
+			
+			background-color:  #b2e4ed;
+/*			background-color: #0039f8;*/
+			font-size: 24px;
 			text-align: center;
 			font-weight: bolder;
 			color: white;
-			padding-top: 16px;
+/*			padding-top: 16px;*/
 			border-radius: 8px;
 			cursor: pointer;
+			border: 6px solid white;
 		}
-
+		
 		div.room {
 			position: absolute;
 			padding: 20px;
@@ -109,7 +120,8 @@
 			top: 60px;
 			position: absolute;
 			left: calc(100% - 300px);
-			background-color: #24ada8;
+/*			background-color: #aa7f2d;*/
+			border-left: 6px dashed white;
 		}
 		
 		input#room-id {
@@ -207,8 +219,8 @@
 			showRoom($(this).attr("data-roomid"));
 			return false;
 		});
-		
-		
+
+
 		//control romm
 
 		var room = '<div class="tab" data-roomid="@id">@tab</div><div class="room" data-roomid="@id">聊天室： @tab <br></div>';
@@ -257,7 +269,7 @@
 		</div>
 	</div>
 	<div id="listMember"></div>
-		
+
 	<div id="say">
 		<input type="text" class="say">
 		<div id="send">Send</div>
