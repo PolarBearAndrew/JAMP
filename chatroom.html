@@ -166,13 +166,13 @@
 			
 			
 //			console(data.user);
-			myId = data.user.name;///?????
+			myId = data.user;///?????
 		});
 
 		$('html, body').on('click', 'div#send', function () {
 			var data = new Object(); ///建立物件
 			data.from = myId;
-			data.to = to; //傳送目標
+			data.to = roomIdNow; //傳送目標
 			data.say = $('input.say').val(); //input的訊息
 			data.roomid = roomIdNow;
 
