@@ -4,43 +4,55 @@ var path = require('path'),
 	bodyParser = require('body-parser'),
 	cookieParser = require('cookie-parser'),
 	app = express(),
-	server = app.listen(3000, function(){ console.log('listen on *:3000'); });
-	io = require('socket.io')(server);
-	
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine' ,'ejs');
+	server = app.listen(3000, function () {
+		console.log('listen on *:3000');
+	});
+io = require('socket.io')(server);
 
-app.use(bodyParser.urlencoded({extended: false}));
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+
+app.use(bodyParser.urlencoded({
+	extended: false
+}));
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use('/public', express.static(__dirname + '/public'));
 
+
+
+
 var users = {};
 
-app.get('/', function(req, res){
-	if(req.cookies.user == null){
+app.get('/', function (req, res) {
+	if (req.cookies.user == null) {
 		res.redirect('/signin');
 	} else {
 		res.render('chat.ejs');
 	}
 });
 
-app.get('/signin', function(req, res){
+app.get('/signin', function (req, res) {
 	res.render('login.ejs');
 });
 
-app.post('/formLogin', function(req, res){
+app.post('/formLogin', function (req, res) {
+	//
 	if (users[req.body.name]) {
-		//´æÔÚ£¬²»ÔÊÔSµÇÈë
-		res.redirect('/signin');
+		console.log('formLogin');
+		//Â¥ÃŠâ€˜â„Â£Â¨â‰¤Âªâ€˜Â â€˜SÂµÂ«Â»Ã
+		res.redirect('/signin'); //
 	} else {
-		//²»´æÔÚ£¬ƒ¦´æÓÃ‘ô cookie KÌøŞDÖ÷í“
-		res.cookie("user", req.body.name, {maxAge: 1000*60});
-		res.redirect('/');
+		//â‰¤ÂªÂ¥ÃŠâ€˜â„Â£Â¨Ã‰Â¶Â¥ÃŠâ€âˆšÃ«Ã™ cookie Ã…KÃƒÂ¯ï¬DÃ·ËœÃŒÃ¬
+		res.cookie("user", req.body.name, {
+			maxAge: 1000 * 60
+		});
+		res.sendFile(__dirname + '/chatroom.html');
+		//res.redirect('/');
 	}
 });
 
-app.post('/formLogout' , function(req, res){
+app.post('/formLogout', function (req, res) {
 	res.render('login.ejs');
 });
 
@@ -49,21 +61,27 @@ io.sockets.on('connection', function (socket) {
 	// server notice that somebody does login with all
 	socket.on('online', function (data) {
 		socket.name = data.user;
-		if(!users[data.user]){
+		if (!users[data.user]) {
 			users[data.user] = data.user;
 		}
-  		io.sockets.emit('online', {users: users, user: data.user});
-  	});
-
-  	// server notice that somebody does loginout with all
-  	socket.on('disconnect', function() {
-  		//Èô users ¶ÔÏóÖĞ±£´æÁË¸ÃÓÃ»§Ãû
-  		if (users[socket.name]) {
-    		//´Ó users ¶ÔÏóÖĞÉ¾³ı¸ÃÓÃ»§Ãû
-   			delete users[socket.name];
-    		//ÏòÆäËûËùÓĞÓÃ»§¹ã²¥¸ÃÓÃ»§ÏÂÏßĞÅÏ¢
-    		socket.broadcast.emit('offline', {users: users, user: socket.name});
-  		}
+		io.sockets.emit('online', {
+			users: users,
+			user: data.user
+		});
 	});
-	
+
+	// server notice that somebody does loginout with all
+	socket.on('disconnect', function () {
+		//Â»Ã™ users âˆ‚â€˜Å“Ã›Ã·â€“Â±Â£Â¥ÃŠÂ¡Ã€âˆâˆšâ€âˆšÂªÃŸâˆšËš
+		if (users[socket.name]) {
+			//Â¥â€ users âˆ‚â€˜Å“Ã›Ã·â€“â€¦Ã¦â‰¥Ëâˆâˆšâ€âˆšÂªÃŸâˆšËš
+			delete users[socket.name];
+			//Å“Ãšâˆ†â€°Ã€ËšÃ€Ë˜â€â€“â€âˆšÂªÃŸÏ€â€â‰¤â€¢âˆâˆšâ€âˆšÂªÃŸÅ“Â¬Å“ï¬‚â€“â‰ˆÅ“Â¢
+			socket.broadcast.emit('offline', {
+				users: users,
+				user: socket.name
+			});
+		}
+	});
+
 });
