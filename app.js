@@ -37,10 +37,7 @@ app.get('/signin', function (req, res) {
 });
 
 app.post('/formLogin', function (req, res) {
-	//
 	if (users[req.body.name]) {
-		console.log('formLogin');
-		//¥Ê‘⁄£¨≤ª‘ ‘Sµ«»Î
 		res.redirect('/signin'); //
 	} else {
 		//≤ª¥Ê‘⁄£¨É¶¥Ê”√ëÙ cookie ÅKÃ¯ﬁD÷˜Ìì
@@ -48,6 +45,13 @@ app.post('/formLogin', function (req, res) {
 			maxAge: 1000 * 60
 		});
 
+
+		users[req.body.name] = {
+			name: req.body.name,
+			password: req.body.password,
+			pos: req.body.pos,
+			pro: req.body.pro
+		};
 
 		res.sendFile(__dirname + '/chatroom.html');
 	}
@@ -61,10 +65,14 @@ app.post('/formLogout', function (req, res) {
 io.sockets.on('connection', function (socket) {
 	// server notice that somebody does login with all
 	socket.on('online', function (data) {
-		socket.name = data.user;
-		if (!users[data.user]) {
-			users[data.user] = data.user;
-		}
+
+		//		socket.name = data.user;
+		//		if (!users[data.user]) {
+		//			users[data.user] = data.user;
+		//		}
+
+		//		console.log("user" + data.user + "\n----------");
+		//console.log("users" + users + "\n----------");
 		io.sockets.emit('online', {
 			users: users,
 			user: data.user
