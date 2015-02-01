@@ -8,9 +8,9 @@
   <script>
 	  $(function(){
 	  	$("#submitBtn").click(function(){
-	  		var namex = $("#namex").val();
-	  		var passwordx = $("#passwordx").val();
-	  		if(namex == ""|| passwordx ==""){
+	  		var myName = $("#myName").val();
+	  		var password = $("#password").val();
+	  		if(myName == ""|| password ==""){
 		  		alert("請輸入您的大名及密碼");
 		  	}else{
 		  		$("#postForm").submit();
@@ -18,42 +18,47 @@
 		});
 	  });
   </script>
+  <style>
+	.vertical-container {
+		display: -webkit-flex;
+	  	display: flex;
+	  	height: 300px;
+	}
+	.vertically-centered {
+	  	margin: auto;
+	}
+  </style>
 </head>
 <body>
-	<h1>請輸入您的登入資訊</h1>
-	<form action="/formLogin" method="post" class="form-inline" id="postForm">
-		<div class="form-group">
-			<input type="text" name="name" id="namex" placeholder="請輸入您的大名" class="form-control" />
-			<input type="text" name="password" id="passwordx" placeholder="請輸入您的密碼"  class="form-control" />
-			<input type="button" value="進入聊天室" id="submitBtn" class="btn btn-success"/>
-		</div>
-		<div>
+	<div class="vertical-container">
+		<div  class="vertically-centered">
+		<h1>請輸入您的登入資訊</h1>
+		<form action="/formLogin" method="post" class="form-inline" id="postForm">
 			<div class="form-group">
+				<input type="text" name="myName" id="myName" placeholder="請輸入您的大名" class="form-control" />
+				<input type="text" name="password" id="password" placeholder="請輸入您的密碼"  class="form-control" />
 				<select name="pos" id="" class="form-control">
-					<option value="fullstack">全端神</option>
+					<option value="fullstack">無敵全端神</option>
 					<option value="design">設計師</option>
 					<option value="soft">軟體工程師</option>
 					<option value="hard">硬體工程師</option>
 					<option value="student">學生</option>
 				</select>
+				<input type="button" value="進入聊天室" id="submitBtn" class="btn btn-success"/>
 			</div>
-			<div class="form-group">
-				<div>
-					<ul class="list-unstyled">
-						<li><input type="checkbox" name="pro" value="Arduino">Arduino</li>
-						<li><input type="checkbox" name="pro" value="CSS">CSS</li>
-						<li><input type="checkbox" name="pro" value="HTML">HTML</li>
-						<li><input type="checkbox" name="pro" value="jquery">jquery</li>
-						<li><input type="checkbox" name="pro" value="node.js">node.js</li>
-						<li><input type="checkbox" name="pro" value="php">php</li>
-						<li><input type="checkbox" name="pro" value="photoshop">PS</li>
-						<li><input type="checkbox" name="pro" value="illustrator">AI</li>
-						<li><input type="checkbox" name="pro" value="QML">QML</li>
-						<li><input type="checkbox" name="pro" value`="UI/UX">UI/UX</li>
-					</ul>
-				</div>
+			<div style="max-height:50px; overflow:scroll-y;">
+				<label><input type="checkbox" name="pro" value="Arduino">Arduino</label>
+				<label><input type="checkbox" name="pro" value="CSS">CSS</label>
+				<label><input type="checkbox" name="pro" value="HTML">HTML</label>
+				<label><input type="checkbox" name="pro" value="illustrator">illustrator</label>
+				<label><input type="checkbox" name="pro" value="jquery">jquery</label>
+				<label><input type="checkbox" name="pro" value="node.js">node.js</label>
+				<label><input type="checkbox" name="pro" value="php">php</label>
+				<label><input type="checkbox" name="pro" value="photoshop">photoshop</label>
+				<label><input type="checkbox" name="pro" value="QML">QML</label>
 			</div>
+		</form>
 		</div>
-	</form>
+	</div>
 </body>
 </html>
