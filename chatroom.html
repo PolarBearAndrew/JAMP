@@ -100,18 +100,15 @@
 
 	<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
 	<script src="http://code.jquery.com/jquery-2.1.3.js"></script>
+	<script src="public/js/jquery.cookie.js"></script>				
 
 	<script>
 		//name list
 		$(document).ready(function () {
 			//fadeout rooms and show "all" room
 			showRoom("all");
-			
-//			var user = new Object(); ///建立物件
-//			user.name = "Mark";
-//			user.pos = "pos"; 
-//			user.job = "job"; 
-			socket.emit('online', 'login success'); //傳送給server
+			var user = $.cookie('user');
+			socket.emit('online', user); //傳送給server
 		});
 
 		$('html, body').on('click', 'a.name', function () {
@@ -130,13 +127,16 @@
 		//room 
 		var roomIdNow = "";
 
-		var myId = "andrew";
+		var myId = "nono id";
 		var myTeam = "JAMP";
-		var to = "andrew";
+		var to = "all";
 
 		var socket = io();
 
 		socket.on('say', function (data) { //收到訊息
+			
+			console.log('get info');
+			
 			//alert(data.to.indexOf(myId));
 			if (data.to == 'all') {
 				$('div.room[data-roomid="all"]').append(data.from + "&nbsp;[JAMP]" + "&nbsp;:&nbsp;" + data.say + "<br/>");
@@ -163,6 +163,10 @@
 			$.each(tmp, function (key, value) {
 				$("#listMember").append("<ul>姓名: <a class=\"name\" id = '" + tmp[key].name + "' href='#' onclick=''style = 'font-size:30px; text-decoration:none;'>" + tmp[key].name + "</a><li>職業: " + tmp[key].pos + "</li><li>專長: " + tmp[key].pro + "</li></ul>");
 			});
+			
+			
+//			console(data.user);
+			myId = data.user.name;///?????
 		});
 
 		$('html, body').on('click', 'div#send', function () {

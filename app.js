@@ -75,7 +75,7 @@ io.sockets.on('connection', function (socket) {
 		//console.log("users" + users + "\n----------");
 		io.sockets.emit('online', {
 			users: users,
-			user: data.user
+			user: data
 		});
 	});
 
@@ -94,6 +94,7 @@ io.sockets.on('connection', function (socket) {
 	});
 
 	socket.on('msg', function (data) { //掛載msg事件-->代表有人說話
+		socket.broadcast.emit('say', data);
 		socket.emit('say', data);
 	});
 
