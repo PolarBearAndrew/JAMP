@@ -47,8 +47,9 @@ app.post('/formLogin', function (req, res) {
 		res.cookie("user", req.body.name, {
 			maxAge: 1000 * 60
 		});
+
+
 		res.sendFile(__dirname + '/chatroom.html');
-		//res.redirect('/');
 	}
 });
 
@@ -82,6 +83,10 @@ io.sockets.on('connection', function (socket) {
 				user: socket.name
 			});
 		}
+	});
+
+	socket.on('msg', function (data) { //掛載msg事件-->代表有人說話
+		socket.emit('say', data);
 	});
 
 });

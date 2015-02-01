@@ -106,31 +106,36 @@
 		$(document).ready(function () {
 			//fadeout rooms and show "all" room
 			showRoom("all");
+			//
+			//			var array = [{
+			//				name: "Mark",
+			//				job: "teacher",
+			//				skill: "PHP,Java"
+			//			}, {
+			//				name: "Jack",
+			//				job: "firefighter",
+			//				skill: "Embeded system"
+			//			}, {
+			//				name: "Peter",
+			//				job: "farmer",
+			//				skill: "Ruby"
+			//			}];
+			//
 
-			var array = [{
-				name: "Mark",
-				job: "teacher",
-				skill: "PHP,Java"
-			}, {
-				name: "Jack",
-				job: "firefighter",
-				skill: "Embeded system"
-			}, {
-				name: "Peter",
-				job: "farmer",
-				skill: "Ruby"
-			}];
-
-
-			$("#reset").click(function () { //jQuery onClick
-				$("#listMember").empty(); //清空原來的div內容
-				//$.getJSON(array,function(data){
-				$.each(array, function (key, value) {
-					$("#listMember").append("<ul>姓名: <a class=\"name\" id = '" + array[key].name + "' href='http://google.com.tw' onclick=''style = 'font-size:30px; text-decoration:none;'>" + array[key].name + "</a><li>職業: " + array[key].job + "</li><li>專長: " + array[key].skill + "</li></ul>");
-				}); //將抓取的資料塞入div 中
-			});
-
-
+			//			$("#reset").click(function () { //jQuery onClick
+			//				$("#listMember").empty(); //清空原來的div內容
+			//				//$.getJSON(array,function(data){
+			//				$.each(array, function (key, value) {
+			//					$("#listMember").append("<ul>姓名: <a class=\"name\" id = '" + array[key].name + "' href='http://google.com.tw' onclick=''style = 'font-size:30px; text-decoration:none;'>" + array[key].name + "</a><li>職業: " + array[key].job + "</li><li>專長: " + array[key].skill + "</li></ul>");
+			//				}); //將抓取的資料塞入div 中
+			//			});
+			
+			
+			var data = new Object(); ///建立物件
+			data.name = "Mark";
+			data.pos = "pos"; 
+			data.job = "job"; 
+			socket.emit('online', data); //傳送給server
 		});
 
 		$('html, body').on('click', 'a.name', function () {
@@ -168,6 +173,18 @@
 			} else {
 				sayRoom(data.roomid, data.from + "&nbsp;[JAMP]" + "&nbsp;:&nbsp;" + data.say + "<br/>"); //沒名單的事群組
 			}
+		});
+
+		
+		
+		socket.on('online', function (data) {
+			
+			console.log(data);
+			
+			$("#listMember").empty(); //清空原來的div內容
+			$.each(data, function (key, value) {
+				$("#listMember").append("<ul>姓名: <a class=\"name\" id = '" + data[key].name + "' href='#' onclick=''style = 'font-size:30px; text-decoration:none;'>" + data[key].name + "</a><li>職業: " + data[key].pos + "</li><li>專長: " + data[key].pro + "</li></ul>");
+			});
 		});
 
 		$('html, body').on('click', 'div#send', function () {
